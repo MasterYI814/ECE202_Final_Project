@@ -10,4 +10,4 @@ __Contents:__
   * Analysis Report of Chatacterization (Github Page)
   * Android App __Findurcar__ for finding a parked car in a parking lot
   * Sample code from both Google and WILD
-  _All the code will need to be import into Android Studio for modification or reproduce our project_
+_All the code will need to be import into Android Studio for modification or reproduce our project_
