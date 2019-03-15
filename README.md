@@ -10,6 +10,7 @@ __Contents:__
   * Analysis Report of Chatacterization (Github Page)
   * Android App __Findurcar__ for finding a parked car in a parking lot _under /Findurcar/_
   * Sample code from both Google and WILD _under Sample Folders_
+  * Data collected and analysis could be found _under /doc/_
   
   _WILD sample code was retrieved from https://github.com/Compulab-WILD/WILD-minimal_
   
