@@ -137,16 +137,17 @@ High occupancy affects the range of measurement, not the distance estimation.
 Google API’s RTT method performs better than the RSSI method in the parking lot.
 In a scenario of finding a car in a parking lot, Google AP works better than WILD AP.
 
-
-
-
 ## VI. FINDURCAR APPLICATION	
 i) Motivation
 In many large scale parking lots like the ones underground large stores like IKEA, many people are having trouble finding their parked cars. In such large closed parking structures, usually GPS signal could not penetrate so that the location is hard to be determined only using GPS. Some large malls like Westfield have come up with solutions to install a camera over each of the parking spots and use image processing to recognize the license plates of the parked cars and provide spot information for customers. While this kind of solutions need a huge budget for installing a huge amount of cameras and cannot provide real-time directions for users to find their cars. The WiFi RTT provided a perfect tool for localization for these indoor situations with minimum changes to the parking lot and provide the user with real-time direction information. In our proof-of-concept design, we only require the users’ phones within the range of three WiFi AP to provide information about the relative location of them and their cars. The application could be extendable into more complex situations.
 
 ii) App UI
 Since we designed and used this app for both characterization experiment data collecting and proof of concept for the car finding application, the UI is more complicated and coarse than the commercialized apps. The initial UI is shown in the figure below.
-[PPT SLIDE 24]
+
+![img16](https://raw.githubusercontent.com/MasterYI814/ECE202_Final_Project/master/doc/24.png)
+
+Figure.16 Findurcar application UI
+
 The current distance measurements from the APs are displayed in the first red box, and the record button enables the user to record the current measurement into the second red box for future reference of parked car location. The black area is the main display for Findurcar directions. Once the car location is located and the current location is determined, the direction would show your parked car’s orientation and distance from your current location. For example, if your parked car is 10 meters away on your right, the direction will show “Your car is 10 meters away on your right.” If your car is within 3 meters away from you, it will display “Found your car!”. The two switches below the main display are only for the project use. The “WILD” switch is used for switching from Google AP mode to WILD mode. The app will only recognize one kind of AP since we hardcoded the AP’s MAC address. For reusing our app, the MAC address needs to be changed according to the APs. The last switch is for switching localization on. Since the locations of APs are also hardcoded into the app, only the specified AP is accurately placed on a specified location, the localization gives accurate results. For reusing our app, the hardcoded coordinates of our APs would also need to be changed. 
 
 iii) User Manual
@@ -155,11 +156,21 @@ The app used WiFi RTT as the tool to tell the distance between the user and the 
 To use the app, the user needs to record the car’s location when the car is parked in the spot by clicking the record button. Then, when they came back into the WiFi range and could not find the car, they could see the direction automatically displayed in the main display as long as the app is opened. The only operation the user needs to do is to record the car’s location. Also, further improvement for the app could be done to record the location automatically, which is similar to Google Maps’ auto record function. 
 
 iv) Localization Algorithm
-The localization algorithm (see ppt page 25 picture) constructs equations in a 2D coordinate system knowing the APs positions and recorded distance from our app. As we have 3 Google APs and 2 WILD APs, we will have 3 equations for Google and 2 for WILD. In the Google AP case, from each pair of equations in the 3 equations, we are able to get an equation of a line. This line consists of all points that satisfy this pair of equations. For every two lines, we can calculate the intersect point. Finally, we are left with 3 points and we take the centroid of the three points. This is our estimated location.
+
+![img17](https://raw.githubusercontent.com/MasterYI814/ECE202_Final_Project/master/doc/25.png)
+
+Figure.17 3-point localization 
+
+The localization algorithm constructs equations in a 2D coordinate system knowing the APs positions and recorded distance from our app. As we have 3 Google APs and 2 WILD APs, we will have 3 equations for Google and 2 for WILD. In the Google AP case, from each pair of equations in the 3 equations, we are able to get an equation of a line. This line consists of all points that satisfy this pair of equations. For every two lines, we can calculate the intersect point. Finally, we are left with 3 points and we take the centroid of the three points. This is our estimated location.
 In the WILD case, we only have two APs for testing, so we put the two APs at the x-axis of the 2D coordinate system. This means that we can eliminate one of the 2nd order terms in the 2 equations. We can solve the equation and get two location points and we pick the one in the first quadrant.
 
 v) Orientation Algorithm
-The orientation algorithm (see ppt page 26 picture)aims to update the user orientation and distance information so it is easier to walk to that location. We use the IMU sensor in the pixel phone to get the rotation vector information of the pixel phone. The orientation that the sensor returns is based on the angle between the North pole and the phone pointing direction clockwise. We need to record the angle between the North pole to the y-axis in the 2D coordinate system. Looking at the image, angel 1 and 3 can be easily calculated using two coordinate of the car and user location. Angle 2 is known from the orientation of the y-axis. The addition of angle 2 and 3 gives angle 4 and we can add 180 degrees to angle 4 and get the angle between the North pole and the car. This angle subtracts the rotation angle given by the pixel phone will result in the angle from the user to the car. This angle is finally characterized into 8 directions. (Front, Front-Left, Left, Rear-Left, Rear, Rear-Right, Right, Front-Right) Notice that this algorithm will be different based on the position of the user and the car, so for details of the algorithm, please review the Android application Main Activity file. 
+
+![img18](https://raw.githubusercontent.com/MasterYI814/ECE202_Final_Project/master/doc/26.png)
+
+Figure.18 Orientation algorithm
+
+The orientation algorithm aims to update the user orientation and distance information so it is easier to walk to that location. We use the IMU sensor in the pixel phone to get the rotation vector information of the pixel phone. The orientation that the sensor returns is based on the angle between the North pole and the phone pointing direction clockwise. We need to record the angle between the North pole to the y-axis in the 2D coordinate system. Looking at the image, angel 1 and 3 can be easily calculated using two coordinate of the car and user location. Angle 2 is known from the orientation of the y-axis. The addition of angle 2 and 3 gives angle 4 and we can add 180 degrees to angle 4 and get the angle between the North pole and the car. This angle subtracts the rotation angle given by the pixel phone will result in the angle from the user to the car. This angle is finally characterized into 8 directions. (Front, Front-Left, Left, Rear-Left, Rear, Rear-Right, Right, Front-Right) Notice that this algorithm will be different based on the position of the user and the car, so for details of the algorithm, please review the Android application Main Activity file. 
 
 
 
