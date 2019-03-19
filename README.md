@@ -7,10 +7,11 @@ __Software used:__ Our software is mainly based on Google Android P APIs
 __Hardware used:__ Google Pixel 2 Phone, Google WiFi w/ latest firmware update, WILD AP (https://fit-iot.com/web/products/wild/)
 
 __Contents:__
-  * Analysis Report of Chatacterization (Github Page)
+  * Analysis Report of Chatacterization (Github Page: https://masteryi814.github.io/ECE202_Final_Project/)
   * Android App __Findurcar__ for finding a parked car in a parking lot _under /Findurcar/_
   * Sample code from both Google and WILD _under Sample Folders_
-  * Data collected and analysis could be found _under /doc/_
+  * Data collected and analysis could be found _under /ranging_results.xlsx_
+  * Presentation Slides could be found _under /presentation/_
   
   _WILD sample code was retrieved from https://github.com/Compulab-WILD/WILD-minimal_
   
