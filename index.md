@@ -26,6 +26,8 @@ WiFi RTT is already verified for high accuracy in prior work[3], the researchers
 
 ![img1](https://raw.githubusercontent.com/MasterYI814/ECE202_Final_Project/master/doc/5.png)
 
+Figure.1 WiFi RTT Mechanism 
+
 There are two hardware devices involved in the ranging process: our phone as a slave (station) and the access point as a master (responder). The process has mainly three steps: request, ranging burst and timestamp send-back. The first step is initiated by the phone (slave). An FTM ranging request is sent to the specified WiFi RTT capable access point(s) for acknowledgment. Once the access point accepted the request, the second step took place and the actual ranging process happened during the second step. During the ranging burst, multiple FTM handshake can be initiated by the access point (master). A single FTM handshake is shown in the Figure as “Ping” and “Pong”. The FTM packets will first initiate by the access point to the phone as “Ping”. The access point will record the timestamp it sends the “Ping” as t1, and the phone will record the timestamp when it receives the “Ping” as t2. Then, the phone will send the ACK (“Pong”) back to access point and record the send time as t3. The access point records the “Pong” received time as t4. Finally, the t1, t4 timestamps will be sent back to the phone for calculation. This completes a single FTM handshake, and a burst can include multiple handshakes. The round trip time will be calculated as t_diff = (t4-t1)-(t3-t2). The distance could be calculated as t_diff * c(speed of light). The t_diff calculated from handshakes will be averaged to get a more accurate result for a burst.
 
 ## III. ANDROID RTT API
@@ -37,6 +39,8 @@ When using the RTT API in Android Studio, here are the steps to properly declare
 
 ![img2](https://raw.githubusercontent.com/MasterYI814/ECE202_Final_Project/master/doc/7.png)
 
+Figure.2 WiFi RTT API Initialization
+
 First of all, ACCESS_FINE_LOCATION permission needs to be declared in the Manifest file. Then, there needs to be an if statement in the Main Activity file checking if the “PackageManager.PERMISSION_GRANTED” indicator is true or not. If it is true, this means that the device supports WiFi RTT API. Finally, there needs to be an if statement checking if the “scanResult.is80211mcResponder()” returns true or not. If it is true again, this means that the AP is WiFi RTT capable. System service “WIFI_RTT_RANGING_SERVICE” needs to be granted permission for using the WiFiRTTManager in Android. If all of the steps are completed without fail, the application is ready for development.
 
 ## IV. HARDWARE SETUP
@@ -46,7 +50,7 @@ Since in most of the test scenarios we don’t have power outlets available, we 
 
 ![img3](https://raw.githubusercontent.com/MasterYI814/ECE202_Final_Project/master/doc/9.png)
 
-Figure3
+Figure.3 Localization setup
 
 For localization purpose, we have two cars supply power for three Google WiFis as shown in the red box. An extension cord is used to power the third WiFi access point. Assume we are localizing within a Cartesian coordinate system, the three Google WiFi is located at (10,10), (15,20), (20,10) coordinates. The unit of measurements is in meter. For WILD localization, the coordinates for the two WILD devices is (10,0), (20,0). Due to the limitation of the number of WILD devices, we can only put the WILD device on the x-axis and localizing in the first quadrant. For both devices, we are placing the APs on the ground to ensure we are localizing in a 2-D plane (z = 0). We are also deliberately put the measuring device (Pixel 2) right on the ground to ensure it is in the same plane as the APs. In the application Findurcar, since the precision requirement is not strict for this application, we are neglecting the phone’s vertical distance above the ground while using the app. 
 The characterization experiments are done in different environments setups for ranging precision and compared between the devices for localization precision. The test environments includes temperature variance tested in the same parking lot at noon and at night with low occupancy in the lots, parking lot occupancy variance tested in the same indoor parking lot at different time on workday, obstacle variance tested in in-room condition, antenna orientation variation tested at all eight orientations for both AP devices and finally a test conducted vertically in the parking lot penetrating concrete obstacle. The data collected in these experiments are shown in section V. 
@@ -56,27 +60,74 @@ Localization algorithms we used for both scenarios will be discussed in section 
 ## V. DATA ANALYSIS
 Before I get into data analysis, I want to show how the data are collected and arranged. For every testing scenarios, we collected samples for that are equally spaced and this information was presented on the x-axis of the graphs. For each recorded set, there were 10 values recorded. The distance difference was calculated by taking the median of the 10 values and subtracting it to the true value measured by a tape measure. The y-axis of the graphs represents the difference from the true value. For detailed information about the data, please look at the data spreadsheet.
 
-(PPT page 11) 
+![img4](https://raw.githubusercontent.com/MasterYI814/ECE202_Final_Project/master/doc/11.png)
+
+Figure.4 WILD VS Google temperature
+
 The noon temperature was 17.5℃ (63.5℉) and the night was 9℃ (48.2℉). We can see that Google AP performed better than WILD as it was generally closer to the x-axis meaning it was closer to the true value. 
-(PPT PAGE 12)
+
+![img5](https://raw.githubusercontent.com/MasterYI814/ECE202_Final_Project/master/doc/12.png)
+
+Figure.5 Noon VS Night
+
 WILD and Google APs were compared to themselves and the results showed that WILD at night is better than noon but Google at noon is better than at night. Still, Google APs were closer to the x-axis than the WILD APs. 
-(PPT PAGE 13)
+
+![img6](https://raw.githubusercontent.com/MasterYI814/ECE202_Final_Project/master/doc/13.png)
+
+Figure.6 WILD VS Google occupancy
+
 High and low occupancy meant the number of cars and the crowdedness of the traffic in a parking lot. We chose the midday and midnight of a parking lot to represent occupancy. Google APs were better than WILD AP although the difference was smaller compared to previous comparisons. 
-(PPT page 14)
+
+![img7](https://raw.githubusercontent.com/MasterYI814/ECE202_Final_Project/master/doc/14.png)
+
+Figure.7 High VS Low occupancy
+
 Both WILD and Google APs performed similarly with WILD had a slightly higher distance difference. Here, it is clear to say that high occupancy does not affect the distance accuracy but it indeed affects the measurement of the distance range as there are no 28m and 30m measurement available in high occupancy case.
-(PPT PAGE 15)
+
+![img8](https://raw.githubusercontent.com/MasterYI814/ECE202_Final_Project/master/doc/15.png)
+
+Figure.8 Outdoor VS Indoor
+
 WILD APs performed better in indoor situations while Google APs performed better in outdoor situations. Overall, Google APs still performed better than WILD APs.
-(PPT PAGE 16)
+
+![img9](https://raw.githubusercontent.com/MasterYI814/ECE202_Final_Project/master/doc/16.png)
+
+Figure.9 WILD VS Google Orientation
+
 By fixing the position of the APs on the ground and changing the location of the pixel phone, the orientation data was measured. We can see that Google APs performed consistently in all orientations and it performed better than the WILD APs. The reason can be the number of antennas and position angles on both APs. Google AP has 4 antennas placed around the device whereas WILD APs had 2 antennas facing the same direction, not covering as many angles compared to Google AP.
-(PPT page 17)
+
+![img10](https://raw.githubusercontent.com/MasterYI814/ECE202_Final_Project/master/doc/17.png)
+
+Figure.10 WILD VS Google inroom
+
 Both APs performed similarly to each other. Now, it is clear to say that Google APs has a small offset at lower distances making the distance difference at small values always negative. We believed Google API was calibrated using the Google AP and adding an offset made the Google AP more accurate than the WILD AP. 
-(PPT PAGE 18)
-The ability to penetrate walls was one of the characters compared. Two APs were placed on the first floor of a parking lot and distances were estimated on the second and third floor of the parking lot. It is clear to see from the table that both distance difference and standard deviation of Google AP is better than the WILD AP.
-(PPT PAGE 19&20) 
+
+![img11](https://raw.githubusercontent.com/MasterYI814/ECE202_Final_Project/master/doc/18.png)
+
+Figure.11 WILD VS Google obstacles
+
+The ability to penetrate obstacles was one of the characters compared. Two APs were placed on the first floor of a parking lot and distances were estimated on the second and third floor of the parking lot. It is clear to see from the table that both distance difference and standard deviation of Google AP is better than the WILD AP.
+
+![img12](https://raw.githubusercontent.com/MasterYI814/ECE202_Final_Project/master/doc/19.png)
+
+Figure.12 Google Localization
+
+![img13](https://raw.githubusercontent.com/MasterYI814/ECE202_Final_Project/master/doc/20.png)
+
+Figure.13 WILD Localization
+
 In the location comparison, Google APs had an average distance difference of 1.85m and WILD APs had an average distance difference of 2.58m. It is also clear to see that Google APs estimated accurate distance more consistently than WILD APs.
-(PPT PAGE 21)
+
+![img14](https://raw.githubusercontent.com/MasterYI814/ECE202_Final_Project/master/doc/21.png)
+
+Figure.14 WILD VS Google distance standard deviation
+
 Comparing the distance difference standard deviation between Google AP and WILD AP, the fluctuation at night is much smaller than noon for WILD. Google AP performed steady and overall better than WILD looking at the y-axis. 
-(PPT PAGE 22) 
+
+![img15](https://raw.githubusercontent.com/MasterYI814/ECE202_Final_Project/master/doc/22.png)
+
+Figure.15 WILD VS Google RSSI standard deviation
+ 
 Comparing the RSSI difference standard deviation, the standard deviation at night for WILD AP performed better than all the other three curves. From the previous comparisons, we can see that Google AP estimated more accurately than WILD AP, so this means that the RSSI measurement may not be proportional to the distance estimated. RSSI can be affected by a lot of factors, like heavy traffic or high-frequency noise, so it is not a good method to estimate distance comparing to the time of flight method using by Google API.
 
 Finally, Here are some key takeaway points: 
