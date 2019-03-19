@@ -166,7 +166,7 @@ In the WILD case, we only have two APs for testing, so we put the two APs at the
 
 v) Orientation Algorithm
 
-![img18](https://raw.githubusercontent.com/MasterYI814/ECE202_Final_Project/master/doc/26.jpg)
+![img18](https://raw.githubusercontent.com/MasterYI814/ECE202_Final_Project/master/doc/26.JPG)
 
 Figure.18 Orientation algorithm
 
