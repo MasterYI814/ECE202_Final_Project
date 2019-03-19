@@ -23,7 +23,9 @@ For this project, we created a single app for both data collecting and applicati
 
 ## II. TECHNICAL BACKGROUND
 WiFi RTT is already verified for high accuracy in prior work[3], the researchers showed high accuracy results in both outdoor and indoor scenarios using an open platform. The concepts of WiFi RTT is shown in Figure.1 below[2]. 
-[PPT SLIDE5 左图]
+
+![img1](https://raw.githubusercontent.com/MasterYI814/ECE202_Final_Project/master/doc/5.png)
+
 There are two hardware devices involved in the ranging process: our phone as a slave (station) and the access point as a master (responder). The process has mainly three steps: request, ranging burst and timestamp send-back. The first step is initiated by the phone (slave). An FTM ranging request is sent to the specified WiFi RTT capable access point(s) for acknowledgment. Once the access point accepted the request, the second step took place and the actual ranging process happened during the second step. During the ranging burst, multiple FTM handshake can be initiated by the access point (master). A single FTM handshake is shown in the Figure as “Ping” and “Pong”. The FTM packets will first initiate by the access point to the phone as “Ping”. The access point will record the timestamp it sends the “Ping” as t1, and the phone will record the timestamp when it receives the “Ping” as t2. Then, the phone will send the ACK (“Pong”) back to access point and record the send time as t3. The access point records the “Pong” received time as t4. Finally, the t1, t4 timestamps will be sent back to the phone for calculation. This completes a single FTM handshake, and a burst can include multiple handshakes. The round trip time will be calculated as t_diff = (t4-t1)-(t3-t2). The distance could be calculated as t_diff * c(speed of light). The t_diff calculated from handshakes will be averaged to get a more accurate result for a burst.
 
 ## III. ANDROID RTT API
@@ -32,14 +34,20 @@ The Android RTT API features WiFi location functionality that measures the dista
 There are some requirements when using the WiFi RTT API. The hardware of the device making the ranging request must implement the 802.11mc FTM standard. The device making the ranging request must be running Android 9 (API level 28) or later. The device making the ranging request must have location services enabled and Wi-Fi scanning turned on. The application making the ranging request must have the ACCESS_FINE_LOCATION permission. The access point must implement the IEEE 802.11mc FTM standard.
 
 When using the RTT API in Android Studio, here are the steps to properly declare the use of API.
-(PPT PAGE 7)
+
+![img2](https://raw.githubusercontent.com/MasterYI814/ECE202_Final_Project/master/doc/7.png)
+
 First of all, ACCESS_FINE_LOCATION permission needs to be declared in the Manifest file. Then, there needs to be an if statement in the Main Activity file checking if the “PackageManager.PERMISSION_GRANTED” indicator is true or not. If it is true, this means that the device supports WiFi RTT API. Finally, there needs to be an if statement checking if the “scanResult.is80211mcResponder()” returns true or not. If it is true again, this means that the AP is WiFi RTT capable. System service “WIFI_RTT_RANGING_SERVICE” needs to be granted permission for using the WiFiRTTManager in Android. If all of the steps are completed without fail, the application is ready for development.
 
 ## IV. HARDWARE SETUP
 We used three hardware for our project, one device as a slave station to receive FTM, and two responder APs as a master FTM sender. Since we are testing the WiFi RTT on Android so that we chose Pixel phone since it has unaltered Android OS. We used a Pixel 2 phone with the latest Android P OS updated. Pixel 2 phone is based on a Qualcomm Snapdragon 835 SoC. The APs we chose to use is Google WiFi based on Qualcomm IPQ4019 and WILD device based on Intel 8260AC. Google WiFi has four antennas located around the device’s circumstance. The WILD AP has two RP-SMA antennas. In the real testing setups, Google WiFi and WILD AP have a similar range of around 25 meters with -80db, while the maximum possible working distance could reach over 100 meters in absolute free space.
 
 Since in most of the test scenarios we don’t have power outlets available, we are using car 12V power supply to power the APs. We use 12V to 110V AC power adapter and extension cords to put the APs to our specified locations. The setup is shown in the figure below:
-[PPT SLIDE9]
+
+![img3](https://raw.githubusercontent.com/MasterYI814/ECE202_Final_Project/master/doc/9.png)
+
+Figure3
+
 For localization purpose, we have two cars supply power for three Google WiFis as shown in the red box. An extension cord is used to power the third WiFi access point. Assume we are localizing within a Cartesian coordinate system, the three Google WiFi is located at (10,10), (15,20), (20,10) coordinates. The unit of measurements is in meter. For WILD localization, the coordinates for the two WILD devices is (10,0), (20,0). Due to the limitation of the number of WILD devices, we can only put the WILD device on the x-axis and localizing in the first quadrant. For both devices, we are placing the APs on the ground to ensure we are localizing in a 2-D plane (z = 0). We are also deliberately put the measuring device (Pixel 2) right on the ground to ensure it is in the same plane as the APs. In the application Findurcar, since the precision requirement is not strict for this application, we are neglecting the phone’s vertical distance above the ground while using the app. 
 The characterization experiments are done in different environments setups for ranging precision and compared between the devices for localization precision. The test environments includes temperature variance tested in the same parking lot at noon and at night with low occupancy in the lots, parking lot occupancy variance tested in the same indoor parking lot at different time on workday, obstacle variance tested in in-room condition, antenna orientation variation tested at all eight orientations for both AP devices and finally a test conducted vertically in the parking lot penetrating concrete obstacle. The data collected in these experiments are shown in section V. 
 
@@ -116,7 +124,7 @@ In this project, we prerecord the location information of the parking lot that w
 ## VIII. CONCLUSION
 The characterization result for the WiFi Round-Trip-Time measurement is very desirable. We found both WILD and Google devices can achieve high accuracy in various environment setups. Even if the RSSI is low and the signal becomes weak, the distance measurement is still accurate enough for most of the applications. Google AP has higher accuracy in longer distance and WILD AP has higher accuracy in shorter distance relatively. Although we are using a coarse algorithm for estimating location, the localization result for both devices is around 2 meters. After testing the Findurcar application we developed, we found that the direction displayed in the app is accurate and working. Using the directions displayed in the app, we can find our recorded car faultlessly. It is very likely that WiFi RTT could be developed to be used in different indoor localization applications.
 
-REFERENCES
+## REFERENCES
 [1] https://www.wi-fi.org/news-events/newsroom/wi-fi-certified-location-brings-wi-fi-indoor-positioning-capabilities
 
 [2] https://www.gpsworld.com/how-to-achieve-1-meter-accuracy-in-android/
