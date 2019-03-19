@@ -12,6 +12,7 @@ __Contents:__
   * Sample code from both Google and WILD _under Sample Folders_
   * Data collected and analysis could be found _under /ranging_results.xlsx_
   * Presentation Slides could be found _under /presentation/_
+  * Demo video available at https://youtu.be/3Qu_qaIWJbA
   
   _WILD sample code was retrieved from https://github.com/Compulab-WILD/WILD-minimal_
   
